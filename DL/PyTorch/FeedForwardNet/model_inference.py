@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader
 
 target_mapping= ["one","two","Three","Four","Five","Six","Seven","Eight","Nine","Ten"]
 BATCH_SIZE = 10
-def validation(model,data_loader,loss_fn,device):
+def validation(model,data_loader,loss_fn,target_mapping,device):
     model.eval()
     with torch.inference_mode():
         for inputs, targets in data_loader:
@@ -14,8 +14,8 @@ def validation(model,data_loader,loss_fn,device):
             predictions = model(inputs)
             loss = loss_fn(predictions,targets)
             print(f"Loss:{loss}")
-            predicted = predictions[0].argmax(dim=0)
-            print(f"Predicted:{target_mapping[predicted]} | Ground Truth:{target_mapping[targets.argmax(dim=0)]}")
+            predicted_index = predictions[0].argmax(dim=0)
+            print(f"Predicted:{target_mapping[predicted_index]} | Ground Truth:{target_mapping[targets.argmax(dim=0)]}")
 
 
 if __name__ == "__main__":
@@ -29,4 +29,4 @@ if __name__ == "__main__":
     _,test_data = load_MNIST_dataset()
     test_data_loader = DataLoader(dataset = test_data, batch_size=BATCH_SIZE,shuffle= False)
     loss_fn = nn.CrossEntropyLoss()
-    validation(uploaded_model,test_data_loader,loss_fn,device)
+    validation(uploaded_model,test_data_loader,loss_fn,target_mapping,device)
